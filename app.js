@@ -1,3 +1,5 @@
+var debugMode = false;
+var c = console.log;
 module.exports = function(file, rootData, next){
 
 	var that = this;
@@ -70,3 +72,11 @@ module.exports = function(file, rootData, next){
 	}
 
 }
+module.exports.debug = function(debugMode){
+	if(debugMode){
+		console.log = function(){};
+	}{
+		console.log = c;
+	}
+}
+module.exports.debug(debugMode);
