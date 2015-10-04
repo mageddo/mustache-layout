@@ -1,0 +1,26 @@
+{
+  "name": "mustache-layout",
+  "version": "1.0.0",
+  "description": "Mustache template with layout archtecture like ejs",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mageddo/mustache-layout.git"
+  },
+  "keywords": [
+    "express",
+    "nodejs",
+    "layout",
+    "template",
+    "mustache"
+  ],
+  "author": "Elvis de Freitas Souza @ElvisMageddo",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/mageddo/mustache-layout/issues"
+  },
+  "homepage": "https://github.com/mageddo/mustache-layout#readme"
+}

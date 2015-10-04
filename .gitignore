@@ -1,0 +1,42 @@
+# user folders
+**/files/
+
+# project configurations
+**/node_modules/
+**/.settings/
+**/.nbinfo
+**/.sailsrc
+**/.editorconfig
+**/.project
+**/.classpath
+**/nb-configuration.xml
+**/nbactions*.xml
+**/dependency-reduced-pom.xml
+**/jetty-web.xml
+**/desempenho
+
+# log files
+*.log
+
+# binary files
+*.class
+**/bin/
+**/target/
+
+# compacted files
+*.zip
+*.tar.gz
+*.tar.xz
+*.tar.bz2
+*.jar
+
+# images
+*.png
+*.PNG
+*.jpg
+*.JPG
+*.gif
+*.GIF
+*.jpeg
+*.JPEG
+*.ico
