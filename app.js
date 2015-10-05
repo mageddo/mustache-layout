@@ -1,6 +1,6 @@
 var fs = require("fs"),
 		mustache = require("mustache"),
-		debugMode = false,
+		debugMode = true,
 		log,
 		systemOptions;
 
@@ -31,7 +31,7 @@ module.exports = function(file, rootData, next){
 	if(files.layout){
 		fs.exists(files.layout, function(is){
 			if(is){
-				log("compilando com layout...");
+				log("existe layout...");
 				fs.readFile(files.layout, function(err, data){
 					if(!err){
 						loadFile(data.toString());
@@ -71,6 +71,8 @@ module.exports = function(file, rootData, next){
 		log("renderizando...\n", templateHtml, "\n---------------\n", options);
 		try{
 			var html;
+			// compile  partials (layout need to be true)
+			// @deprecated
 			if(options.compile === false){
 				var replaceMustache = /\{\{[\ ]*>[\ ]*body[\ ]*\}\}/, keyReplace = "tmpBodyHightTest";
 				html = templateHtml.replace(replaceMustache, keyReplace);
@@ -83,7 +85,7 @@ module.exports = function(file, rootData, next){
 					html = mustache.to_html(templateHtml, options, partials);
 					next(null, html);
 				}else{
-					var originalTemplates = getMustacheTemplates(partials.body);
+					var originalTemplates = getMustacheTemplates(partials.body || templateHtml);
 					html = mustache.to_html(templateHtml, options, partials);
 					var modifiedTemplates = getMustacheTemplates(html);
 					html = recoverTemplates(originalTemplates, modifiedTemplates, html);

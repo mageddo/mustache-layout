@@ -1,0 +1,32 @@
+<div class="popup white-popup mfp-hide container ctBookmarkNew" >
+	<h1>Novo bookmark</h1>
+	<form class="form" role="search" id="frmBookmarkNew" >
+		<input type="hidden" value="{{{ bookmark.id }}}" name="id" />
+		<div class="form-group col-xs-6 col-sm-4">
+			<label for="iptName" >Name </label>
+			<input id="iptName" type="text" class="form-control" value="{{{ bookmark.name }}}" name="name" placeholder="bookmark name">
+		</div>
+		<div class="form-group col-xs-6 col-sm-4">
+			<label for="iptLink" >Link </label>
+			<input id="iptLink" type="text" name="link" value="{{{ bookmark.link}}}" class="form-control" placeholder="bookmark link">
+		</div>
+		<div class="form-group col-xs-6 col-sm-4">
+			<label for="iptTag" >Tags </label><br />
+			<select id="iptTag" class="js-data-example-ajax" name="tag" multiple="multiple" style="width: 200px">
+				{{#tags}}
+					<option value="{{id}}">{{name}}</option>
+				{{/tags}}
+			</select>
+		</div>
+		<div class="col-xs-12" id="txtDescription">{{{ html }}}</div>
+		<div class="col-xs-12">
+			<button type="submit" class="btn btn-default">save</button>
+		</div>
+	</form>
+</div>
+<script src="/js/ct/bookmarkNew.js" ></script>
+<script type="text/template" id="tplItemFilter">
+<div class="clearfix">
+{{.}}
+</div>
+</script>
