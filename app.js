@@ -1,6 +1,6 @@
 var fs = require("fs"),
 		mustache = require("mustache"),
-		debugMode = true,
+		debugMode = process.argv.slice(2)[0] === 'debug',
 		log,
 		systemOptions;
 
