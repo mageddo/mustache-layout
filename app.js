@@ -67,7 +67,16 @@ module.exports = function(file, rootData, next){
 		partials = partials || {};
 		log("renderizando...\n", templateHtml, "\n---------------\n", options);
 		try{
-			next(null, mustache.to_html(templateHtml, options, partials));
+			var html;
+			if(options.compile === false){
+				var replaceMustache = /\{\{[\ ]*>[\ ]*body[\ ]*\}\}/, keyReplace = "tmpBodyHightTest";
+				html = templateHtml.replace(replaceMustache, keyReplace);
+				html = mustache.to_html(html, options);
+				html = html.replace(keyReplace, partials.body);
+			}else{
+				html = mustache.to_html(templateHtml, options, partials);
+			}
+			next(null, html);
 		}catch(err){
 			next(err);
 		}
