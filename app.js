@@ -1,13 +1,15 @@
-var debugMode = false;
-var c = console.log;
+var fs = require("fs"),
+		mustache = require("mustache"),
+		debugMode = false,
+		log;
 module.exports = function(file, rootData, next){
 
 	var that = this;
-	console.log("file: ", file, "\n");
-	console.log("rootData: ", rootData, "\n");
-	console.log("next: ", next, "\n");
-	console.log("arguments: ",arguments);
-	console.log("this: ", this, "\n--------------------------------------\n\n");
+	log("file: ", file, "\n");
+	log("rootData: ", rootData, "\n");
+	log("next: ", next, "\n");
+	log("arguments: ",arguments);
+	log("this: ", this, "\n--------------------------------------\n\n");
 
 	var files = {
 		layout: null,
@@ -26,19 +28,19 @@ module.exports = function(file, rootData, next){
 	if(files.layout){
 		fs.exists(files.layout, function(is){
 			if(is){
-				console.log("compilando com layout...");
+				log("compilando com layout...");
 				fs.readFile(files.layout, function(err, data){
 					if(!err){
 						loadFile(data.toString());
 					}
 				});
 			}else{
-				console.log("não existe arquivo de layout %s", files.layout);
+				log("não existe arquivo de layout %s", files.layout);
 				loadFile();
 			}
 		});
 	}else{
-		console.log("o uso de layout está desativado");
+		log("o uso de layout está desativado");
 		loadFile();
 	}
 
@@ -46,11 +48,11 @@ module.exports = function(file, rootData, next){
 		fs.exists(files.view, function(is){
 			fs.readFile(files.view, function(err, data){
 				if(template){
-					//console.log("baixou ", data.toString());
-					console.log("compilando com layout e com view...");
+					//log("baixou ", data.toString());
+					log("compilando com layout e com view...");
 					render(template, rootData, {body: data.toString()});
 				}else{
-					console.log("compilando sem layout e com view...");
+					log("compilando sem layout e com view...");
 					render(data.toString(), rootData);
 				}
 			});
@@ -63,7 +65,7 @@ module.exports = function(file, rootData, next){
 
 	function render(templateHtml, options, partials){
 		partials = partials || {};
-		console.log("renderizando...\n", templateHtml, "\n---------------\n", options);
+		log("renderizando...\n", templateHtml, "\n---------------\n", options);
 		try{
 			next(null, mustache.to_html(templateHtml, options, partials));
 		}catch(err){
@@ -74,9 +76,9 @@ module.exports = function(file, rootData, next){
 }
 module.exports.debug = function(debugMode){
 	if(debugMode){
-		console.log = function(){};
-	}{
-		console.log = c;
+		log = console.log;
+	}else{
+		log = function(){};
 	}
 }
 module.exports.debug(debugMode);

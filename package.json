@@ -1,13 +1,13 @@
 {
   "name": "mustache-layout",
-  "version": "1.0.0",
+  "version": "1.0.4",
   "description": "Mustache template with layout archtecture like ejs",
   "main": "app.js",
   "dependencies":{
     "mustache": "2.1.3"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node tests/app.js"
   },
   "repository": {
     "type": "git",
