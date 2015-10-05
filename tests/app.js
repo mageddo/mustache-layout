@@ -1,6 +1,7 @@
 var render = require("./../app.js");
 var tests = [
-	require("./mustacheLayoutTest")(render)
+	//require("./mustacheLayoutTest")(render),
+	require("./mustacheLayoutComEscapeTest")(render)
 ];
 
 for(var k in tests){

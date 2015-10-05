@@ -1,10 +1,13 @@
 var fs = require("fs"),
 		mustache = require("mustache"),
 		debugMode = false,
-		log;
+		log,
+		systemOptions;
+
 module.exports = function(file, rootData, next){
 
 	var that = this;
+	systemOptions = rootData.settings['view options'];
 	log("file: ", file, "\n");
 	log("rootData: ", rootData, "\n");
 	log("next: ", next, "\n");
@@ -15,11 +18,11 @@ module.exports = function(file, rootData, next){
 		layout: null,
 		view: null
 	};
-
+	
 	if(rootData.layout !== false){
 		if(rootData.layout){
 			files.layout = getPath(rootData.layout);
-		}else if(rootData.settings['view options'] && rootData.settings['view options'].layout){
+		}else if(systemOptions.layout){
 			files.layout = getPath('layout');
 		}
 	}
@@ -73,10 +76,26 @@ module.exports = function(file, rootData, next){
 				html = templateHtml.replace(replaceMustache, keyReplace);
 				html = mustache.to_html(html, options);
 				html = html.replace(keyReplace, partials.body);
+				next(null, html);
 			}else{
-				html = mustache.to_html(templateHtml, options, partials);
+				if(systemOptions.escapeTemplate === false){
+					log("template sem escapar");
+					html = mustache.to_html(templateHtml, options, partials);
+					next(null, html);
+				}else{
+					var originalTemplates = getMustacheTemplates(partials.body);
+					html = mustache.to_html(templateHtml, options, partials);
+					var modifiedTemplates = getMustacheTemplates(html);
+					html = recoverTemplates(originalTemplates, modifiedTemplates, html);
+					log("template com escape");
+					log(
+						"template original ", originalTemplates, "\n\n template modificado", modifiedTemplates,
+						"\n\nhtml pronto ", html
+					);
+			    next(null, html);
+				}
 			}
-			next(null, html);
+			
 		}catch(err){
 			next(err);
 		}
@@ -90,4 +109,32 @@ module.exports.debug = function(debugMode){
 		log = function(){};
 	}
 }
+
+String.prototype.regexIndexOf = function(regex, startpos) {
+    var indexOf = this.substring(startpos || 0).search(regex);
+    return (indexOf >= 0) ? (indexOf + (startpos || 0)) : indexOf;
+}
+function getMustacheTemplates(html){
+    var templates = [], finalTemplate = "</script>";
+    for(var index = search(html, index); index != -1; index = search(html, index)){
+        //console.log("antes", index);
+        var lastSearched = html.indexOf(finalTemplate, index) + finalTemplate.length;
+        templates.push(html.substring(index, lastSearched));
+        index = lastSearched;
+        //console.log("depois %s, total %s", index, html.length);
+    }
+    return templates;
+    //console.log(templates);
+}
+function recoverTemplates(templates, templatesToFind, html){
+    for(var i=0; i < templates.length; i++){
+        html = html.replace(templatesToFind[i], templates[i]);
+    }
+    return html;
+}
+function search(html, index){
+    return html.regexIndexOf(/<script[\ ]+type="text\/template/mg, index);
+}
+
+
 module.exports.debug(debugMode);

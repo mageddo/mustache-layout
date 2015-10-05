@@ -40,3 +40,24 @@ A mustache template engine with layout architecture
 		});
 	});
 	```
+
+# Escaping template tags
+On versions `1.0.6` and bellow, all the mustache templates are compiled on serverside, it means that if you have a 
+template tag inside `.html` it will be compiled, now it not occurs
+
+## Observations
+* Make sure that every template have a id, or unique attribute to be different of others templates
+	* wrong examples
+
+			<script type="text/template" class="xyz"></script>
+			<script type="text/template" class="xyz"></script>
+
+	* right examples
+
+			<script type="text/template" class="xyz"></script>
+			<script type="text/template" class="xyz2"></script>
+
+* Ever, use `type="text/template"`
+
+
+## If for some motive you want to do it, on `view options` set `escapeTemplate` to `false`

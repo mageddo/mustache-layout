@@ -20,6 +20,7 @@ module.exports = function(render){
 			});
 		},
 		layoutViewDisableCompileTest: function(){
+
 			render.call({
 				name: "index",
 				root: __dirname + "/view",
@@ -37,6 +38,27 @@ module.exports = function(render){
 				if(err)
 					throw err;
 				console.log("\n----------------\ndados finais [layoutViewDisableCompileTest]:\n ", data);
+			});
+		},
+		layoutViewDisableEscapeTemplatesTest: function(){
+			myName = arguments.callee.name;
+			render.call({
+				name: "index",
+				root: __dirname + "/view",
+				ext: ".html"
+			}, __dirname + '/view/index.html', {
+				settings: {
+					'view options': {
+						layout: true,
+						escapeTemplate: false
+					}
+				},
+				title: "Test App",
+				message: "Hello World"
+			}, function(err, data){
+				if(err)
+					throw err;
+				console.log("\n----------------\ndados finais [layoutViewEscapeTemplatesTest]:\n ", data);
 			});
 		}
 	}
