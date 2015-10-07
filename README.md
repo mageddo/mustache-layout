@@ -60,4 +60,4 @@ template tag inside `.html` it will be compiled, now it not occurs
 * Ever, use `type="text/template"`
 
 
-## If for some motive you want to do it, on `view options` set `escapeTemplate` to `false`
+## If for some motive you want to do not it, on `view options` set `escapeTemplate` to `false`
