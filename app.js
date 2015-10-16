@@ -31,19 +31,19 @@ module.exports = function(file, rootData, next){
 	if(files.layout){
 		fs.exists(files.layout, function(is){
 			if(is){
-				log("existe layout...");
+				log("layout exists...");
 				fs.readFile(files.layout, function(err, data){
 					if(!err){
 						loadFile(data.toString());
 					}
 				});
 			}else{
-				log("não existe arquivo de layout %s", files.layout);
+				log("layout file do not exists: %s", files.layout);
 				loadFile();
 			}
 		});
 	}else{
-		log("o uso de layout está desativado");
+		log("layout use it is disabled");
 		loadFile();
 	}
 
@@ -51,11 +51,10 @@ module.exports = function(file, rootData, next){
 		fs.exists(files.view, function(is){
 			fs.readFile(files.view, function(err, data){
 				if(template){
-					//log("baixou ", data.toString());
-					log("compilando com layout e com view...");
+					log("compiling with layout and view...");
 					render(template, rootData, {body: data.toString()});
 				}else{
-					log("compilando sem layout e com view...");
+					log("compiling without layout and with view...");
 					render(data.toString(), rootData);
 				}
 			});
@@ -68,7 +67,7 @@ module.exports = function(file, rootData, next){
 
 	function render(templateHtml, options, partials){
 		partials = partials || {};
-		log("renderizando...\n", templateHtml, "\n---------------\n", options);
+		log("rendering...\n", templateHtml, "\n---------------\n", options);
 		try{
 			var html;
 			// compile  partials (layout need to be true)
@@ -81,7 +80,7 @@ module.exports = function(file, rootData, next){
 				next(null, html);
 			}else{
 				if(systemOptions.escapeTemplate === false){
-					log("template sem escapar");
+					log("template not scaped");
 					html = mustache.to_html(templateHtml, options, partials);
 					next(null, html);
 				}else{
@@ -89,10 +88,10 @@ module.exports = function(file, rootData, next){
 					html = mustache.to_html(templateHtml, options, partials);
 					var modifiedTemplates = getMustacheTemplates(html);
 					html = recoverTemplates(originalTemplates, modifiedTemplates, html);
-					log("template com escape");
+					log("template escaped");
 					log(
-						"template original ", originalTemplates, "\n\n template modificado", modifiedTemplates,
-						"\n\nhtml pronto ", html
+						"original template", originalTemplates, "\n\n  modified template", modifiedTemplates,
+						"\n\nhtml done! ", html
 					);
 			    next(null, html);
 				}

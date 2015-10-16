@@ -16,7 +16,7 @@ module.exports = function(render){
 			}, function(err, data){
 				if(err)
 					throw err;
-				console.log("\n----------------\ndados finais:\n ", data);
+				console.log("\n----------------\nfinal data:\n ", data);
 			});
 		},
 		layoutViewDisableCompileTest: function(){
@@ -37,7 +37,7 @@ module.exports = function(render){
 			}, function(err, data){
 				if(err)
 					throw err;
-				console.log("\n----------------\ndados finais [layoutViewDisableCompileTest]:\n ", data);
+				console.log("\n----------------\nfinal data [layoutViewDisableCompileTest]:\n ", data);
 			});
 		},
 		layoutViewDisableEscapeTemplatesTest: function(){
@@ -58,7 +58,7 @@ module.exports = function(render){
 			}, function(err, data){
 				if(err)
 					throw err;
-				console.log("\n----------------\ndados finais [layoutViewEscapeTemplatesTest]:\n ", data);
+				console.log("\n----------------\nfinal data [layoutViewEscapeTemplatesTest]:\n ", data);
 			});
 		}
 	}

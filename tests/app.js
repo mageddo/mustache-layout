@@ -7,10 +7,10 @@ var tests = [
 for(var k in tests){
 	for(var l in tests[k]){
 		try{
-			console.log("testando: %s", l);
+			console.log("testing: %s", l);
 			tests[k][l]();
 		}catch(e){
-			console.log("erro: ", e);
+			console.log("error: ", e);
 		}
 	}
 }

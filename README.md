@@ -1,6 +1,8 @@
 # mustache-layout
 A mustache template engine with layout architecture
 
+**Please** say me if it works for you contacting `edigitalb@gmail.com` or [creating suggestions and defects](https://github.com/mageddo/mustache-layout/issues)
+
 # testing 
 * run tests
 
@@ -11,6 +13,9 @@ A mustache template engine with layout architecture
 * creating your own demo
 
 	```javascript
+	var app = require("express");
+	// here express configurations
+	...
 	var mustacheLayout = require("mustache-layout");
 	
 	app.locals({

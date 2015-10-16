@@ -16,7 +16,7 @@ module.exports = function(render){
 			}, function(err, data){
 				if(err)
 					throw err;
-				console.log("\n----------------\ndados finais:\n ", data);
+				console.log("\n----------------\nfinal data:\n ", data);
 			});
 		},
 		layoutEscapeTemplateTest2: function(){
@@ -36,7 +36,7 @@ module.exports = function(render){
 			}, function(err, data){
 				if(err)
 					throw err;
-				console.log("\n----------------\ndados finais:\n ", data);
+				console.log("\n----------------\nfinal data:\n ", data);
 			});
 		}
 	}
