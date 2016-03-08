@@ -66,3 +66,8 @@ template tag inside `.html` it will be compiled, now it not occurs
 
 
 ## If for some motive you want to do not it, on `view options` set `escapeTemplate` to `false`
+
+# License
+
+This project is released under version 2.0 of the [Apache License][].
+[Apache License]: http://www.apache.org/licenses/LICENSE-2.0
