@@ -1,6 +1,7 @@
 var fs = require("fs"),
+		util = require("util"),
 		mustache = require("mustache"),
-		debugMode = process.argv.slice(2)[0] === 'debug',
+		debugMode = process.env.debug === '1',
 		log,
 		systemOptions;
 
@@ -48,8 +49,14 @@ module.exports = function(file, rootData, next){
 	}
 
 	function loadFile(template){
+		log('loading %s', template);
 		fs.exists(files.view, function(is){
 			fs.readFile(files.view, function(err, data){
+				if(err){
+					data = util.format("Could not read the view %s, %s", files.view, err);
+					log(data);
+					log(err);
+				}
 				if(template){
 					log("compiling with layout and view...");
 					render(template, rootData, {body: data.toString()});
@@ -105,7 +112,10 @@ module.exports = function(file, rootData, next){
 }
 module.exports.debug = function(debugMode){
 	if(debugMode){
-		log = console.log;
+		console._log = console.log;
+		log = console.log = function(){
+			console._log.bind(console, util.format.apply(null, arguments));
+		};
 	}else{
 		log = function(){};
 	}

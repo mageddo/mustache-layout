@@ -27,9 +27,18 @@ app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get("/", function(req, res) {
-	console.log("testing..");
 	res.render("index", {
 		time: new Date().toString()
+	});
+});
+
+
+// SIDEBARS
+app.get("/product/1", function(req, res) {
+	res.render("product", {
+		title: "Black Socks",
+		image: "http://pngimg.com/upload/socks_PNG8264.png",
+		categories: ["Acessories", "Phones", "Joypads"]
 	});
 });
 
