@@ -5,6 +5,16 @@ var fs = require("fs"),
 		log,
 		systemOptions;
 
+console.log
+if(debugMode){
+	console._log = console.log;
+	log = console.log = function(){
+		console._log.bind(console, util.format.apply(null, arguments))();
+	};
+}else{
+	log = function(){};
+}
+
 module.exports = function(file, rootData, next){
 
 	var that = this;
@@ -110,16 +120,6 @@ module.exports = function(file, rootData, next){
 	}
 
 }
-module.exports.debug = function(debugMode){
-	if(debugMode){
-		console._log = console.log;
-		log = console.log = function(){
-			console._log.bind(console, util.format.apply(null, arguments));
-		};
-	}else{
-		log = function(){};
-	}
-}
 
 String.prototype.regexIndexOf = function(regex, startpos) {
     var indexOf = this.substring(startpos || 0).search(regex);
@@ -146,6 +146,3 @@ function recoverTemplates(templates, templatesToFind, html){
 function search(html, index){
     return html.regexIndexOf(/<script[\ ]+type="text\/template/mg, index);
 }
-
-
-module.exports.debug(debugMode);
