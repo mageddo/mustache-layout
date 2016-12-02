@@ -5,7 +5,6 @@ var fs = require("fs"),
 		log,
 		systemOptions;
 
-console.log
 if(debugMode){
 	console._log = console.log;
 	log = console.log = function(){
@@ -67,15 +66,56 @@ module.exports = function(file, rootData, next){
 					log(data);
 					log(err);
 				}
-				if(template){
-					log("compiling with layout and view...");
-					render(template, rootData, {body: data.toString()});
-				}else{
-					log("compiling without layout and with view...");
-					render(data.toString(), rootData);
-				}
+
+				var strData = data.toString(), nested = {body: strData};
+				loadPartials(strData, nested, function(){
+					if(template){
+						log("compiling with layout and view...");
+						render(template, rootData, nested);
+					}else{
+						log("compiling without layout and with view...");
+						render(data.toString(), rootData, nested);
+					}
+				});
+
 			});
 		})
+	}
+
+	function loadFileContent(template, callback){
+		fs.exists(files.view, function(fileExists){
+			if(fileExists){
+				fs.readFile(files.view, function(err, data){
+					if(!err){
+						callback(null, data.toString());
+					}else{
+						callback(err);
+					}
+				}
+			}else{
+				callback("File not found");
+			}
+		}
+	}
+
+	function loadPartials(strData, partials, callback){
+		var partialsRegex = /{{\s*>(\w+)\s*}}/g;
+		if(partialsRegex.test(strData)){
+			var partialsName = partialsRegex.exec(strData)[1];
+			var viewToLoad = rootData[partialsName] || partialsName;
+			loadFileContent(rootData.views + viewToLoad, function(err, data){
+				if(err){
+					partials[partialsName] = err;
+					callback();
+				}else{
+					partials[partialsName] = data;
+					loadPartials(data, partials, callback);
+				}
+			});
+
+		}else{
+			callback();
+		}
 	}
 
 	function getPath(view){
