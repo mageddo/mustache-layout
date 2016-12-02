@@ -1,5 +1,6 @@
 var fs = require("fs"),
 		util = require("util"),
+		async = require("async"),
 		mustache = require("mustache"),
 		debugMode = process.env.debug === '1',
 		log, err,
@@ -69,8 +70,8 @@ module.exports = function(file, rootData, next){
 					log(err);
 				}
 
-				var strData = data.toString(), nested = {body: strData};
-				loadPartials(strData, nested, function(){
+				var strData = data.toString(), nested = {body: strData}, tasks = [];
+				loadPartials(strData, nested, function(){ // when all series stack mounted
 					if(template){
 						log("compiling with layout and view...");
 						render(template, rootData, nested);
@@ -101,27 +102,42 @@ module.exports = function(file, rootData, next){
 	}
 
 	function loadPartials(strData, partials, callback){
-		var partialsRegex = /{{\s*>\s*([\w\/]+)\s*}}/g, r;
+		var tasks = [];
 		log("m=loadPartials, status=begin");
+		var partialsRegex = /{{\s*>\s*([\w\/]+)\s*}}/g, r;
+		var arr = [];
 		while( (r  = partialsRegex.exec(strData)) != null ){
-		
-			var partialsName = r[1];
-			var viewToLoad = rootData[partialsName] || partialsName, path = getPath(viewToLoad);
-			log("m=loadPartials, status=matched, partialsName=%s, view=%s, path=%s", partialsName, viewToLoad, path);
-			loadFileContent(path, function(err, data){
-				if(err){
-					partials[partialsName] = err;
-					log("m=loadPartials, status=err, err=%s", err);
-					callback();
-				}else{
-					log("m=loadPartials, status=loading-new, data=%s", data);
-					partials[partialsName] = data;
-					loadPartials(data, partials, callback);
-				}
-			});
+			log("m=loadPartials, status=executed, partialsName=%s", r[1]);
+			tasks.push( 
+				(function(partialsName){
+					return function(cb){
+						var viewToLoad = rootData[partialsName] || partialsName, path = getPath(viewToLoad);
+						log("m=loadPartials, status=matched, partialsName=%s, view=%s, path=%s", partialsName, viewToLoad, path);
+						loadFileContent(path, function(err, data){
+							if(err){
+								partials[partialsName] = err;
+								log("m=loadPartials, status=err, err=%s", err);
+								cb();
+							}else{
+								log("m=loadPartials, status=loading-new, data=%s", data);
+								partials[partialsName] = data;
+								loadPartials(data, partials, function(){log("m=cb, partialsName=%s", partialsName);cb(null, partialsName);});
+							}
+						});
+					}
+				})(r[1])
+			);
 		}
+
+		tasks.push(function(cb){
+			log('m=loadPartials, status=end');
+			cb('end');
+			callback();
+		});
+		async.series(tasks, function(err, results){
+			log("m=loadPartials, status=process-serie, err=%s, results=%s", err, results);
+		})
 		log("m=loadPartials, status=success");
-		callback();
 	}
 
 	function getPath(view){
