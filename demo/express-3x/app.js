@@ -38,7 +38,8 @@ app.get("/product/1", function(req, res) {
 	res.render("product", {
 		title: "Black Socks",
 		image: "http://pngimg.com/upload/socks_PNG8264.png",
-		categories: ["Acessories", "Phones", "Joypads"]
+		categories: ["Acessories", "Phones", "Joypads"],
+		cart: 'sidebar/user-cart'
 	});
 });
 

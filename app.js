@@ -101,10 +101,11 @@ module.exports = function(file, rootData, next){
 	}
 
 	function loadPartials(strData, partials, callback){
-		var partialsRegex = /{{\s*>\s*([\w\/]+)\s*}}/;
+		var partialsRegex = /{{\s*>\s*([\w\/]+)\s*}}/g, r;
 		log("m=loadPartials, status=begin");
-		if(partialsRegex.test(strData)){
-			var partialsName = partialsRegex.exec(strData)[1];
+		while( (r  = partialsRegex.exec(strData)) != null ){
+		
+			var partialsName = r[1];
 			var viewToLoad = rootData[partialsName] || partialsName, path = getPath(viewToLoad);
 			log("m=loadPartials, status=matched, partialsName=%s, view=%s, path=%s", partialsName, viewToLoad, path);
 			loadFileContent(path, function(err, data){
@@ -118,10 +119,9 @@ module.exports = function(file, rootData, next){
 					loadPartials(data, partials, callback);
 				}
 			});
-		}else{
-			log("m=loadPartials, status=success");
-			callback();
 		}
+		log("m=loadPartials, status=success");
+		callback();
 	}
 
 	function getPath(view){
