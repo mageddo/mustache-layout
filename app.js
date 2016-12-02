@@ -84,10 +84,10 @@ module.exports = function(file, rootData, next){
 		})
 	}
 
-	function loadFileContent(template, callback){
-		fs.exists(files.view, function(fileExists){
+	function loadFileContent(file, callback){
+		fs.exists(file, function(fileExists){
 			if(fileExists){
-				fs.readFile(files.view, function(err, data){
+				fs.readFile(file, function(err, data){
 					if(!err){
 						callback(null, data.toString());
 					}else{
@@ -95,25 +95,25 @@ module.exports = function(file, rootData, next){
 					}
 				});
 			}else{
-				callback("File not found");
+				callback(util.format("'%s' not found", file));
 			}
 		});
 	}
 
 	function loadPartials(strData, partials, callback){
+		var partialsRegex = /{{\s*>\s*([\w\/]+)\s*}}/;
 		log("m=loadPartials, status=begin");
-		var partialsRegex = /{{\s*>(\w+)\s*}}/g;
 		if(partialsRegex.test(strData)){
 			var partialsName = partialsRegex.exec(strData)[1];
-			var viewToLoad = rootData[partialsName] || partialsName;
-			log("m=loadPartials, status=matched, partialsName=%s", partialsName);
-			loadFileContent(getPath(viewToLoad), function(err, data){
+			var viewToLoad = rootData[partialsName] || partialsName, path = getPath(viewToLoad);
+			log("m=loadPartials, status=matched, partialsName=%s, view=%s, path=%s", partialsName, viewToLoad, path);
+			loadFileContent(path, function(err, data){
 				if(err){
 					partials[partialsName] = err;
-					log("m=loadPartials, status=err");
+					log("m=loadPartials, status=err, err=%s", err);
 					callback();
 				}else{
-					log("m=loadPartials, status=loading-new");
+					log("m=loadPartials, status=loading-new, data=%s", data);
 					partials[partialsName] = data;
 					loadPartials(data, partials, callback);
 				}
