@@ -1,0 +1,33 @@
+{
+  "name": "mustache-layout-demo",
+  "version": "1.0.0",
+  "description": "A demo with some examples for mustache-layout plugin",
+  "main": "app.js",
+  "dependencies":{
+    "mustache-layout": "3.x",
+    "express": "3.x",
+    "body-parser": "1.13.3"
+  },
+  "scripts": {
+    "debug": "node app.js debug",
+		"start": "node app.js",
+    "test": "node tests/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mageddo/mustache-layout.git"
+  },
+  "keywords": [
+    "express",
+    "nodejs",
+    "layout",
+    "template",
+    "mustache"
+  ],
+  "author": "Elvis de Freitas Souza @ElvisMageddo",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/mageddo/mustache-layout/issues"
+  },
+  "homepage": "https://github.com/mageddo/mustache-layout#readme"
+}
