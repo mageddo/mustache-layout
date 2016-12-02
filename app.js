@@ -2,17 +2,19 @@ var fs = require("fs"),
 		util = require("util"),
 		mustache = require("mustache"),
 		debugMode = process.env.debug === '1',
-		log,
+		log, err,
 		systemOptions;
 
 if(debugMode){
-	console._log = console.log;
-	log = console.log = function(){
-		console._log.bind(console, util.format.apply(null, arguments))();
+	log = function(){
+		console.log.bind(console, util.format.apply(null, arguments))();
 	};
 }else{
 	log = function(){};
 }
+err = function(){
+	console.error.bind(console, util.format.apply(null, arguments))();
+};
 
 module.exports = function(file, rootData, next){
 
@@ -91,29 +93,33 @@ module.exports = function(file, rootData, next){
 					}else{
 						callback(err);
 					}
-				}
+				});
 			}else{
 				callback("File not found");
 			}
-		}
+		});
 	}
 
 	function loadPartials(strData, partials, callback){
+		log("m=loadPartials, status=begin");
 		var partialsRegex = /{{\s*>(\w+)\s*}}/g;
 		if(partialsRegex.test(strData)){
 			var partialsName = partialsRegex.exec(strData)[1];
 			var viewToLoad = rootData[partialsName] || partialsName;
-			loadFileContent(rootData.views + viewToLoad, function(err, data){
+			log("m=loadPartials, status=matched, partialsName=%s", partialsName);
+			loadFileContent(getPath(viewToLoad), function(err, data){
 				if(err){
 					partials[partialsName] = err;
+					log("m=loadPartials, status=err");
 					callback();
 				}else{
+					log("m=loadPartials, status=loading-new");
 					partials[partialsName] = data;
 					loadPartials(data, partials, callback);
 				}
 			});
-
 		}else{
+			log("m=loadPartials, status=success");
 			callback();
 		}
 	}
