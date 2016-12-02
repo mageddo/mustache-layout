@@ -18,9 +18,6 @@ app.set('view engine', 'html');
 app.set("view options", {layout: true});
 app.engine("html", mustacheLayout);
 
-//app.use(express.favicon());
-// app.use(express.logger('dev'));
-
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.cookieParser('your secret here'));
 app.use(bodyParser.json());
