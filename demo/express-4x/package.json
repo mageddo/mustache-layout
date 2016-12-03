@@ -4,12 +4,11 @@
   "description": "A demo with some examples for mustache-layout plugin",
   "main": "app.js",
   "dependencies":{
-    "express": "3.x",
-    "body-parser": "1.13.3"
+    "express": "4.x"
   },
   "scripts": {
     "debug": "node app.js debug",
-		"start": "node app.js",
+    "start": "node app.js",
     "test": "node tests/app.js"
   },
   "repository": {

@@ -8,7 +8,9 @@ A mustache template engine with layout architecture
 
 		$ npm test
 
-*	[download the project demo](https://github.com/mageddo/mustache-layout-demo)
+# Samples Options
+* Visit demo folder and run `express-3x` or `express-4x`
+*	[Download the project demo](https://github.com/mageddo/mustache-layout-demo)
 
 * creating your own demo
 
