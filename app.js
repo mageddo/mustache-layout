@@ -101,10 +101,10 @@ module.exports = function(file, rootData, next){
 		});
 	}
 
-	function loadPartials(strData, partials, callback){
+	function loadPartials(strData, partials, callback, fromPartial){
 		var tasks = [];
-		log("m=loadPartials, status=begin");
-		var partialsRegex = /{{\s*>\s*([\w\/]+)\s*}}/g, r;
+		log("m=loadPartials, status=begin, fromPartial=%s", fromPartial);
+		var partialsRegex = /{{\s*>\s*([\w\/\-_\$]+)\s*}}/g, r;
 		var arr = [];
 		while( (r  = partialsRegex.exec(strData)) != null ){
 			log("m=loadPartials, status=executed, partialsName=%s", r[1]);
@@ -121,7 +121,11 @@ module.exports = function(file, rootData, next){
 							}else{
 								log("m=loadPartials, status=loading-new, data=%s", data);
 								partials[partialsName] = data;
-								loadPartials(data, partials, function(){log("m=cb, partialsName=%s", partialsName);cb(null, partialsName);});
+
+								loadPartials(data, partials, function(){
+									log("m=cb, partialsName=%s", partialsName);
+									cb(null, partialsName);
+								}, partialsName);
 							}
 						});
 					}
