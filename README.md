@@ -15,9 +15,11 @@ Looping cart product items
 
 cart-items.html
 
+	<ul>
 	{{#cartItems}}
-		{{> sidebar/cart-item }}
+		<li>{{name}} - {{price}}</li>
 	{{/cartItems}}
+	</ul>
 
 controller.js
 
